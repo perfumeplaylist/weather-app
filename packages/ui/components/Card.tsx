@@ -1,55 +1,74 @@
 import { type ReactNode, type HTMLAttributes } from "react";
+import { type VariantProps, cva } from "class-variance-authority";
 import { cn } from "../../utils/cn";
 
-interface CardProps extends Omit<HTMLAttributes<HTMLDivElement>, 'className'> {
+/**
+ * Card Variants using CVA
+ * Based on design tokens from index.css
+ */
+const cardVariants = cva(
+  "transition-all",
+  {
+    variants: {
+      variant: {
+        default: "bg-[--card-bg] border border-[--card-border] shadow-[--card-shadow]",
+        outlined: "bg-white border border-gray-200",
+        elevated: "bg-white border border-gray-100 shadow-[--shadow-lg]",
+        ghost: "bg-transparent border-none",
+      },
+      padding: {
+        none: "p-0",
+        sm: "p-[--spacing-3]",
+        md: "p-[--card-padding]",
+        lg: "p-[--spacing-6]",
+      },
+      rounded: {
+        none: "rounded-none",
+        sm: "rounded-[--radius-sm]",
+        md: "rounded-[--radius-md]",
+        lg: "rounded-[--radius-lg]",
+        xl: "rounded-[--radius-xl]",
+        "2xl": "rounded-[--card-radius]",
+      },
+      interactive: {
+        true: "cursor-pointer hover:shadow-lg hover:-translate-y-1 active:scale-98",
+        false: "",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      padding: "md",
+      rounded: "2xl",
+      interactive: false,
+    },
+  }
+);
+
+interface CardProps
+  extends Omit<HTMLAttributes<HTMLDivElement>, "className">,
+    VariantProps<typeof cardVariants> {
   children: ReactNode;
-  variant?: "default" | "outlined" | "elevated" | "ghost";
-  padding?: "none" | "sm" | "md" | "lg";
-  rounded?: "none" | "sm" | "md" | "lg" | "xl" | "2xl";
   clickable?: boolean;
   className?: string;
 }
 
-const variantMap = {
-  default: "bg-white border border-gray-100 shadow-sm",
-  outlined: "bg-white border border-gray-200",
-  elevated: "bg-white border border-gray-100 shadow-lg",
-  ghost: "bg-transparent border-none",
-};
-
-const paddingMap = {
-  none: "p-0",
-  sm: "p-3",
-  md: "p-4",
-  lg: "p-6",
-};
-
-const roundedMap = {
-  none: "rounded-none",
-  sm: "rounded-sm",
-  md: "rounded-md",
-  lg: "rounded-lg",
-  xl: "rounded-xl",
-  "2xl": "rounded-2xl",
-};
-
 export const Card = ({
   children,
-  variant = "default",
-  padding = "md",
-  rounded = "2xl",
+  variant,
+  padding,
+  rounded,
+  interactive,
   clickable = false,
   className,
   onClick,
   ...props
 }: CardProps) => {
+  const isInteractive = interactive ?? (clickable || !!onClick);
+
   return (
     <div
       className={cn(
-        variantMap[variant],
-        paddingMap[padding],
-        roundedMap[rounded],
-        (clickable || onClick) && "cursor-pointer active:scale-98 transition-transform",
+        cardVariants({ variant, padding, rounded, interactive: isInteractive }),
         className
       )}
       onClick={onClick}
@@ -59,3 +78,5 @@ export const Card = ({
     </div>
   );
 };
+
+Card.displayName = "Card";
