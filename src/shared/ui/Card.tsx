@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { cn } from "../../../packages/utils/cn";
+import { cn } from "@packages/utils/cn";
 
 interface CardProps {
   children: ReactNode;
@@ -21,6 +21,3 @@ export const Card = ({ children, className, onClick }: CardProps) => {
     </div>
   );
 };
-
-
-
