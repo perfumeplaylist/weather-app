@@ -1,0 +1,169 @@
+Widget Boundary 기반 Suspense + ErrorBoundary 규칙
+
+목표: pages는 조합만 하고, 데이터 패칭 단위(=widget) 가 로딩/에러 UI 정책을 책임진다.
+모든 useSuspenseQuery는 반드시 widget boundary 내부에서만 실행되도록 한다.
+
+0. 기본 원칙
+
+로딩(Loading)은 Suspense로만 처리
+
+에러(Error)는 ErrorBoundary로만 처리
+
+useSuspenseQuery / useSuspenseInfiniteQuery 등 Suspense 기반 훅은 반드시
+widget의 Boundary 내부에서만 사용한다.
+
+pages에서 Boundary를 감싸는 패턴은 기본 금지한다.
+(예외: 페이지 전체를 “앱 레벨 크래시 보호”로 한 번 감싸는 건 허용)
+
+1. Widget의 정의 (Boundary 단위)
+
+widget은 “페이지에서 재사용 가능한 큰 블록”이며 다음을 포함할 수 있다:
+
+데이터 패칭(useSuspenseQuery)
+
+로딩 스켈레톤
+
+에러 fallback
+
+Empty state(정상 흐름)
+
+widget은 pages에 종속되지 않아야 하고, props로 필요한 파라미터만 받는다.
+
+✅ 예시 widget
+
+CurrentLocationWeatherWidget
+
+WeatherDetailWidget
+
+FavoriteLocationsWidget
+
+LocationSearchResultsWidget
+
+2. 표준 Wrapper 규칙 (widget 내부)
+   2-1. Widget은 “자기 자신을 감싸는 Boundary”를 가진다
+
+각 widget 파일은 아래 구조를 강제한다:
+
+export const WeatherDetailWidget = (props) => {
+return (
+<ErrorBoundary fallback={<WeatherErrorState />}>
+<BaseSuspense fallback={<WeatherLoadingSkeleton />}>
+<WeatherDetailContent {...props} />
+</BaseSuspense>
+</ErrorBoundary>
+);
+};
+
+실제 데이터 패칭 훅(useSuspenseQuery)은 \*Content 컴포넌트 내부에서만 호출한다.
+
+WeatherDetailWidget 자체에서는 useSuspenseQuery 호출 금지.
+
+3. Loading 처리 규칙 (BaseSuspense)
+
+widget은 반드시 자기 도메인에 맞는 loading fallback을 가진다.
+
+loading UI는 가능한 “레이아웃 점프가 적은 Skeleton”을 사용한다.
+
+로딩 분기 로직(isLoading)을 widget content에서 사용 금지 (Suspense로 처리)
+
+✅ 허용:
+
+shared/ui/BaseSuspense.tsx 사용
+
+features/weather/ui/\*Skeleton.tsx 같은 도메인 스켈레톤 추가
+
+4. Error 처리 규칙 (ErrorBoundary)
+   4-1. 에러는 throw로 전파되어야 한다
+
+API 레이어(fetch):
+
+response.ok가 아니면 throw
+
+Zod parse 실패도 throw
+
+따라서 widget은 ErrorBoundary fallback에서만 에러 UI를 보여준다.
+
+4-2. widget별 fallback은 “상황에 맞는 문구/액션”을 포함한다
+
+Weather widget 에러: “날씨 정보를 불러올 수 없습니다 / 다시 시도”
+
+Search widget 에러: “검색 중 문제가 발생했습니다”
+
+Favorites widget 에러: “즐겨찾기를 불러올 수 없습니다”
+
+“정보 없음” 문구는 아래 Empty/Error 분류 규칙을 따른다.
+
+5. Empty(정상) vs Error(비정상) 분류 규칙
+   5-1. Empty는 widget content에서 정상 렌더링으로 처리
+
+검색 결과가 0개 → EmptyLocationState 렌더 (정상 상태)
+
+즐겨찾기 목록이 비어있음 → EmptyFavoriteState 렌더 (정상 상태)
+
+5-2. ErrorBoundary는 “예외 상황”만 담당
+
+네트워크 실패
+
+4xx/5xx
+
+Zod parse 실패
+
+런타임 예외(렌더링 중 crash)
+
+6. Query Options 규칙과의 결합 (필수)
+
+widget content에서 useSuspenseQuery(queryOptions) 형태만 허용
+
+UI에서 queryKey/queryFn 직접 정의 금지
+
+const { data } = useSuspenseQuery(
+weatherQueryOption.weather({ lat, lon })
+);
+
+7. widget 폴더 구조 규칙 (추가 권장)
+
+현재 src/widget 폴더가 비어 있으니, 아래처럼 “Boundary 단위 블록”을 이곳으로 옮기는 걸 권장:
+
+src/widget/
+weather/
+CurrentLocationWeatherWidget.tsx
+WeatherDetailWidget.tsx
+location/
+LocationSearchResultsWidget.tsx
+favorite/
+FavoriteLocationsWidget.tsx
+
+widget은 pages에서 import해서 조합한다.
+
+features는 widget 내부에서 사용될 수 있다.
+
+entities는 widget/content에서 사용될 수 있다.
+
+8. pages의 책임 규칙 (widget 전략 기준)
+
+pages는 “조합/레이아웃/라우팅 파라미터 전달”만 한다.
+
+pages에서 Suspense/ErrorBoundary로 감싸지 않는다.
+
+pages에서 fetch/useSuspenseQuery 직접 호출 금지.
+
+✅ pages 예시:
+
+export const DetailPage = () => {
+const { lat, lon } = useRouteParams();
+return (
+<PageLayout>
+<WeatherDetailWidget lat={lat} lon={lon} />
+</PageLayout>
+);
+};
+
+9. 예외 규칙 (허용되는 pages Boundary)
+
+앱 크래시 보호용으로 App 루트에서 한 번만 감싸는 것은 허용
+
+<ErrorBoundary fallback={<AppFatalError />}>
+<App />
+</ErrorBoundary>
+
+단, 데이터 로딩 skeleton은 widget이 담당한다.

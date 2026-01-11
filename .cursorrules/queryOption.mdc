@@ -1,0 +1,161 @@
+Cursor Rules
+React Query + External API + Zod 기반 안정성 규칙
+
+이 규칙은 외부 Open API(날씨 API 등)를 사용하는 모든 Query / API / Model 계층에 공통으로 적용한다.
+
+0. 네이밍 & 파라미터 규칙
+
+좌표 파라미터는 항상 lat, lon 사용
+
+lan 오타 사용 금지
+
+함수 시그니처, queryKey, URL 파라미터, 타입 정의 전부 lat/lon으로 통일
+
+1. Query Key 규칙
+
+Query Key는 반드시 factory 패턴으로 생성한다.
+
+Query Key에는 primitive 값만 포함한다. (객체/배열 중첩 금지)
+
+Query Key는 as const로 고정한다.
+
+const weatherQueryKeyFactory = {
+weather: () => ["weather"] as const,
+detail: ({ lat, lon }: { lat: number; lon: number }) =>
+[...weatherQueryKeyFactory.weather(), "detail", lat, lon] as const,
+};
+
+2. Query Option 규칙 (TanStack Query)
+
+Query Option 정의 위치:
+
+entities/\*/model/queryOption.ts
+
+반드시 queryOptions()를 사용한다.
+
+queryFn은 API 레이어 함수만 호출한다.
+
+queryOption에서 fetch / env / schema 접근 금지
+
+외부 API 특성상 과도한 재시도 금지
+
+import { queryOptions } from "@tanstack/react-query";
+import weatherApi from "../api/weatherApi";
+
+const weatherQueryOption = {
+weather: ({ lat, lon }: { lat: number; lon: number }) =>
+queryOptions({
+queryKey: weatherQueryKeyFactory.detail({ lat, lon }),
+queryFn: () => weatherApi.getWeather(lat, lon),
+staleTime: 1000 _ 60 _ 10, // 10분
+gcTime: 1000 _ 60 _ 30, // 30분
+retry: 1,
+}),
+};
+
+export default weatherQueryOption;
+
+3. API 레이어 규칙 (fetch + error handling)
+
+API 파일 위치:
+
+entities/_/api/_.ts
+
+fetch 이후 반드시 response.ok 검사
+
+response.ok === false일 경우 반드시 throw
+
+API 함수는 Zod 검증된 데이터만 반환
+
+response.json() 결과를 그대로 반환하는 행위 금지
+
+import { WeatherForecastSchema } from "../model/schema";
+
+const getWeather = async (lat: number, lon: number) => {
+const res = await fetch(
+`https://api.weatherapi.com/v1/forecast.json?key=${process.env.NEXT_PUBLIC_WEATHER_API_KEY}&q=${lat},${lon}&days=3`
+);
+
+if (!res.ok) {
+throw new Error(`Weather API error: ${res.status}`);
+}
+
+const json = await res.json();
+return WeatherForecastSchema.parse(json);
+};
+
+export default { getWeather };
+
+4. Zod Schema 규칙
+
+Zod 스키마 위치:
+
+entities/\*/model/schema.ts
+
+타입은 z.infer<typeof Schema>로 생성
+
+UI에서 실제 사용하는 필드만 포함
+
+전체 응답 100% 스키마화 금지
+
+safeParse 기본 사용 금지 → parse 사용
+
+parse 실패는 react-query error flow로 전달
+
+import { z } from "zod";
+
+export const WeatherForecastSchema = z.object({
+location: z.object({
+name: z.string(),
+country: z.string(),
+localtime: z.string(),
+}),
+current: z.object({
+temp_c: z.number(),
+condition: z.object({
+text: z.string(),
+icon: z.string(),
+code: z.number(),
+}),
+}),
+forecast: z.object({
+forecastday: z.array(
+z.object({
+date: z.string(),
+day: z.object({
+maxtemp_c: z.number(),
+mintemp_c: z.number(),
+condition: z.object({
+text: z.string(),
+icon: z.string(),
+code: z.number(),
+}),
+}),
+})
+),
+}),
+});
+
+export type WeatherForecast = z.infer<typeof WeatherForecastSchema>;
+
+5. UI / Feature 사용 규칙
+
+UI / Feature에서는 queryOption만 사용
+
+fetch / process.env / schema.parse 직접 호출 금지
+
+컴포넌트는 표현(View) 책임만 가진다.
+
+“정보 없음” 상태는 아래 조건 중 하나면 충분하다:
+
+react-query error 상태
+
+data가 존재하지 않는 경우
+
+6. Cursor 실행 명령 (복사해서 그대로 사용)
+
+- Query Key는 factory 패턴 + primitive만 사용 + as const로 고정해라.
+- queryOptions는 entities/\*/model/queryOption.ts에만 정의해라.
+- API 레이어에 response.ok 검사와 throw를 추가해라.
+- 외부 API 응답은 Zod 스키마를 만들어 parse 후 반환해라.
+- UI/feature에서 fetch, env, schema 접근을 금지해라.
