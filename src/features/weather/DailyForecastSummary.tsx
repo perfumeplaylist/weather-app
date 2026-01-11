@@ -1,4 +1,5 @@
 import { WeatherIcon, type WeatherType } from "./WeatherIcon";
+import { Text, Flex } from "@packages/ui";
 
 export interface DailyForecast {
   day: string;
@@ -16,23 +17,27 @@ export const DailyForecastSummary = ({
 }: DailyForecastSummaryProps) => {
   return (
     <div className="mt-6 md:mt-0">
-      <h3 className="text-sm font-semibold text-gray-500 mb-3 px-1">
+      <Text size="sm" weight="semibold" color="muted" className="mb-3 px-1">
         주간 예보
-      </h3>
+      </Text>
       <div className="flex flex-col gap-1 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-2">
         {forecasts.map((item, index) => (
-          <div
+          <Flex
             key={index}
-            className="flex items-center justify-between py-3 px-2 border-b border-gray-100 last:border-0 md:border-b md:last:border-b-0"
+            align="center"
+            justify="between"
+            className="py-3 px-2 border-b border-gray-100 last:border-0 md:border-b md:last:border-b-0"
           >
-            <span className="w-12 text-sm font-medium text-gray-700">
+            <Text size="sm" weight="medium" color="default" className="w-12">
               {item.day}
-            </span>
+            </Text>
             <div className="flex-1 flex justify-center">
               <WeatherIcon type={item.type} className="w-6 h-6" />
             </div>
-            <div className="flex items-center gap-4 w-24 justify-end text-sm">
-              <span className="text-gray-400">{item.low}°</span>
+            <Flex align="center" gap={4} justify="end" className="w-24">
+              <Text size="sm" color="muted">
+                {item.low}°
+              </Text>
               <div className="w-16 h-1 rounded-full bg-gray-100 overflow-hidden relative">
                 <div
                   className="absolute top-0 bottom-0 bg-gradient-to-r from-blue-300 to-orange-300 opacity-60"
@@ -42,9 +47,11 @@ export const DailyForecastSummary = ({
                   }}
                 />
               </div>
-              <span className="font-medium text-gray-800">{item.high}°</span>
-            </div>
-          </div>
+              <Text size="sm" weight="medium" color="default">
+                {item.high}°
+              </Text>
+            </Flex>
+          </Flex>
         ))}
       </div>
     </div>
