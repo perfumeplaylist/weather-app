@@ -50,14 +50,12 @@ export const Header = ({
       </div>
 
       {title && (
-        <h1 className="text-lg font-semibold text-gray-900 absolute left-1/2 -translate-x-1/2">
-          {title}
-        </h1>
+        <div className="text-lg font-semibold text-gray-900 absolute left-1/2 -translate-x-1/2 flex items-center justify-center">
+          {typeof title === "string" ? <h1>{title}</h1> : title}
+        </div>
       )}
 
       <div className="flex items-center justify-end flex-1 gap-2">{right}</div>
     </header>
   );
 };
-
-
