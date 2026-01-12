@@ -1,6 +1,6 @@
-import { DetailPage } from "@/pages/DetailPage";
-import { HomePage } from "@/pages/HomePage";
-import { SearchPage } from "@/pages/SearchPage";
+import { DetailPage } from "@/pages/detail/DetailPage";
+import { HomePage } from "@/pages/home/HomePage";
+import { SearchPage } from "@/pages/search/SearchPage";
 import { BottomNavigation } from "@/shared/ui/BottomNavigation";
 import { PageLayout } from "@packages/ui";
 import { createBrowserRouter, Outlet } from "react-router";
