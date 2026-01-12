@@ -1,11 +1,14 @@
 import { FavoriteLocationCard } from "./FavoriteLocationCard";
-import { type WeatherType } from "../weather/WeatherIcon";
+import { type WeatherType } from "@/entities/weather";
+import { Grid } from "@packages/ui";
 
 export interface SavedLocation {
   id: string;
   name: string;
-  temperature: number;
-  weatherType: WeatherType;
+  temperature: number | null; // null이면 날씨 정보 없음
+  minTemp: number | null;
+  maxTemp: number | null;
+  weatherType: WeatherType | null;
 }
 
 interface FavoriteLocationsGridProps {
@@ -20,7 +23,7 @@ export const FavoriteLocationsGrid = ({
   onDeleteLocation,
 }: FavoriteLocationsGridProps) => {
   return (
-    <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4">
+    <Grid cols={2} gap={3} className="md:grid-cols-3 lg:grid-cols-4 pb-4">
       {locations.map((location) => (
         <FavoriteLocationCard
           key={location.id}
@@ -32,14 +35,6 @@ export const FavoriteLocationsGrid = ({
           }}
         />
       ))}
-      {locations.length === 0 && (
-        <div className="col-span-2 md:col-span-3 lg:col-span-4 py-16 text-center text-gray-400 text-sm bg-gray-50 rounded-xl border border-dashed border-gray-200 flex flex-col items-center justify-center gap-2">
-          <span>즐겨찾기한 지역이 없습니다.</span>
-          <span className="text-xs text-gray-400 opacity-70">
-            우측 상단 버튼을 눌러 추가해보세요.
-          </span>
-        </div>
-      )}
-    </div>
+    </Grid>
   );
 };

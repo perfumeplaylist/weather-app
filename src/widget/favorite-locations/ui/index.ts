@@ -1,0 +1,2 @@
+export { FavoriteLocationsWidget } from "./FavoriteLocationsWidget";
+
