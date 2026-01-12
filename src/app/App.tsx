@@ -1,20 +1,13 @@
-import { BrowserRouter, Routes, Route } from "react-router";
-import { WeatherProvider } from "../shared/context/WeatherContext";
-import { HomePage } from "../pages/HomePage";
-import { SearchPage } from "../pages/SearchPage";
-import { DetailPage } from "../pages/DetailPage";
+import { Toaster } from "sonner";
+import { QueryProvider } from "./provider/queryProvider";
+import { RoutesProvider } from "./provider/routes";
 
 function App() {
   return (
-    <WeatherProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/search" element={<SearchPage />} />
-          <Route path="/detail/:locationId" element={<DetailPage />} />
-        </Routes>
-      </BrowserRouter>
-    </WeatherProvider>
+    <QueryProvider>
+      <RoutesProvider />
+      <Toaster position="top-center" richColors />
+    </QueryProvider>
   );
 }
 
