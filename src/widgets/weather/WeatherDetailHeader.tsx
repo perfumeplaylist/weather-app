@@ -1,13 +1,13 @@
 import { WeatherMobileHeader } from "./WeatherMobileHeader";
 import { WeatherDesktopHeader } from "./WeatherDesktopHeader";
-import { BaseErrorBoundary, EmptyState } from "@/shared";
+import { BaseErrorBoundary, EmptyState, Header } from "@/shared";
 import { useLocationParams } from "@/features/search-location";
 
 export const WeatherDetailHeader = () => {
   const { lat, lon } = useLocationParams();
 
   if (Number(lat) === 0 || Number(lon) === 0 || !lat || !lon) {
-    return <EmptyState title="위치 정보를 불러올 수 없습니다." />;
+    return <Header showBack />;
   }
 
   return (
