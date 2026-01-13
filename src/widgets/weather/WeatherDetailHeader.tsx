@@ -1,22 +1,26 @@
 import { useParams } from "react-router";
 import { WeatherMobileHeader } from "./WeatherMobileHeader";
 import { WeatherDesktopHeader } from "./WeatherDesktopHeader";
+import { BaseErrorBoundary, EmptyState } from "@/shared";
 
-/**
- * 날씨 상세 페이지 헤더 위젯
- * 모바일/데스크탑 헤더를 분기하여 표시
- */
 export const WeatherDetailHeader = () => {
   const { locationId } = useParams();
 
   if (!locationId) {
-    return null;
+    return <EmptyState title="위치 정보를 불러올 수 없습니다." />;
   }
 
   return (
-    <>
+    <BaseErrorBoundary
+      FallbackComponent={({ error }) => (
+        <EmptyState
+          title="위치 정보를 불러올 수 없습니다."
+          description={error.message}
+        />
+      )}
+    >
       <WeatherMobileHeader locationId={locationId} />
       <WeatherDesktopHeader locationId={locationId} />
-    </>
+    </BaseErrorBoundary>
   );
 };

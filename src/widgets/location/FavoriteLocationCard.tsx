@@ -25,6 +25,7 @@ export const FavoriteLocationCard = ({
   maxTemp,
   weatherType,
   onDelete,
+  name,
   onClick,
 }: FavoriteLocationCardProps) => {
   // 날씨 정보가 없는 경우
@@ -36,14 +37,19 @@ export const FavoriteLocationCard = ({
       clickable
       className="relative aspect-4/5 hover:bg-gray-50 transition-colors border-gray-200"
     >
-      <Button
-        variant="ghost"
-        size="sm"
-        onClick={(e) => onDelete(id, e)}
-        aria-label="삭제"
-      >
-        <Trash2 />
-      </Button>
+      <Flex align="center" justify="between">
+        <Text size="base" color="default" align="center" className="px-4">
+          {name}
+        </Text>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={(e) => onDelete(id, e)}
+          aria-label="삭제"
+        >
+          <Trash2 />
+        </Button>
+      </Flex>
 
       <Flex
         direction="col"

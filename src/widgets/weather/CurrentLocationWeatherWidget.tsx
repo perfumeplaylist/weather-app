@@ -1,7 +1,5 @@
-import BaseErrorBoundary from "../../shared/ui/ErrorBoundary";
-import BaseSuspense from "../../shared/ui/Suspense";
+import { BaseErrorBoundary, BaseSuspense, Skeleton } from "@/shared";
 import { CurrentLocationWeatherContent } from "@/features/weather-detail";
-import { Skeleton } from "../../shared/ui/Skeleton";
 import { Card, Text, Flex } from "@packages/ui";
 import { AlertTriangle } from "lucide-react";
 

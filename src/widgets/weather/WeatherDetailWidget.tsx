@@ -1,11 +1,13 @@
 import { useParams } from "react-router";
-import BaseErrorBoundary from "../../shared/ui/ErrorBoundary";
-import BaseSuspense from "../../shared/ui/Suspense";
 import { WeatherDetailContent } from "@/features/weather-detail";
-import { Skeleton } from "../../shared/ui/Skeleton";
-import { Text, Card } from "@packages/ui";
 import { AlertTriangle } from "lucide-react";
-import { Flex } from "@packages/ui";
+import { Flex, Text } from "@packages/ui";
+import {
+  EmptyState,
+  BaseErrorBoundary,
+  BaseSuspense,
+  Skeleton,
+} from "@/shared";
 
 const WeatherDetailLoadingSkeleton = () => {
   return (
@@ -24,24 +26,17 @@ const WeatherDetailLoadingSkeleton = () => {
 
 const WeatherDetailErrorState = ({ error }: { error: Error }) => {
   return (
-    <Card
-      variant="elevated"
-      padding="lg"
-      rounded="xl"
-      className="max-w-md mx-auto mt-8"
-    >
-      <Flex direction="col" align="center" gap={4} className="text-center">
-        <AlertTriangle className="w-12 h-12 text-danger-500" />
-        <Flex direction="col" gap={2}>
-          <Text size="lg" weight="bold" color="default">
-            날씨 정보를 불러올 수 없습니다
-          </Text>
-          <Text size="sm" color="muted">
-            {error.message || "잠시 후 다시 시도해주세요."}
-          </Text>
-        </Flex>
+    <Flex direction="col" align="center" gap={4} className="text-center">
+      <AlertTriangle className="w-12 h-12 text-danger-500" />
+      <Flex direction="col" gap={2} align="center">
+        <Text size="lg" weight="bold" color="default">
+          날씨 정보를 불러올 수 없습니다
+        </Text>
+        <Text size="sm" color="muted">
+          {error.message || "잠시 후 다시 시도해주세요."}
+        </Text>
       </Flex>
-    </Card>
+    </Flex>
   );
 };
 
@@ -49,11 +44,7 @@ export const WeatherDetailWidget = () => {
   const { locationId } = useParams<{ locationId: string }>();
 
   if (!locationId) {
-    return (
-      <Card variant="elevated" padding="lg" className="mt-8">
-        <Text color="muted">Location ID가 필요합니다.</Text>
-      </Card>
-    );
+    return <EmptyState title="위치 정보를 불러올 수 없습니다." />;
   }
 
   return (

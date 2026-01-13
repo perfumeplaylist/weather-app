@@ -5,22 +5,15 @@ import { useNavigate } from "react-router";
 
 interface LocationSearchResultsListProps {
   results: SearchLocationItem[];
-  onSelect?: (item: SearchLocationItem) => void;
 }
 
 export function LocationSearchResultsList({
   results,
-  onSelect,
 }: LocationSearchResultsListProps) {
   const navigate = useNavigate();
 
   const handleCardClick = (item: SearchLocationItem) => {
-    if (onSelect) {
-      onSelect(item);
-    } else {
-      // item.key를 locationId로 사용하여 상세 페이지로 이동
-      navigate(`/detail/${item.key}`);
-    }
+    navigate(`/detail/${item.key}`);
   };
 
   if (results.length === 0) {
