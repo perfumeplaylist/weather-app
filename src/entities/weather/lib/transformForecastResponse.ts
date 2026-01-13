@@ -1,6 +1,5 @@
 import type { WeatherForecast } from "@/entities/weather/model/schema";
 import type { Forecast } from "@/entities/weather/model/schema";
-import type { LocationEntity } from "@/entities/location/types/location.types";
 import { transformDailyForecasts } from "./transformDailyForecasts";
 
 /**
@@ -8,15 +7,16 @@ import { transformDailyForecasts } from "./transformDailyForecasts";
  */
 export function transformForecastResponse(
   data: Forecast,
-  location: LocationEntity
+  lat: number,
+  lon: number
 ): {
   hourlyForecasts: WeatherForecast;
   dailyForecasts: ReturnType<typeof transformDailyForecasts>;
 } {
   // Forecast API 응답을 WeatherForecast 형식으로 변환
   const hourlyForecasts: WeatherForecast = {
-    lat: location.lat,
-    lon: location.lon,
+    lat,
+    lon,
     timezone: data.city.timezone,
     locationName: data.city.name,
     current: {

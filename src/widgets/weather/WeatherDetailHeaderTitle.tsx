@@ -1,5 +1,5 @@
 import { EditFavoriteAlias } from "@/features/favorite/edit-favorite-alias";
-import { useWeatherDetailHeaderByCoordinates } from "@/features/weather/detail/model/useWeatherDetailHeaderByCoordinates";
+import { useWeatherDetailHeaderByCoordinates } from "@/features/weather-detail";
 
 interface WeatherDetailHeaderTitleProps {
   lat: number;

@@ -4,6 +4,7 @@ import {
   saveFavoriteIds,
   loadFavoriteAliases,
   saveFavoriteAliases,
+  loadFavoriteCoordinates,
 } from "./favoriteStorage";
 
 const MAX_FAVORITES = 6;
@@ -15,6 +16,7 @@ export function getFavoritesState(): FavoriteState {
   return {
     ids: loadFavoriteIds(),
     aliases: loadFavoriteAliases(),
+    coordinates: loadFavoriteCoordinates(),
   };
 }
 

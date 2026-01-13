@@ -57,3 +57,23 @@ export function saveFavoriteAliases(
     console.error("Failed to save favorite aliases:", error);
   }
 }
+
+/**
+ * localStorage에서 coordinates 읽기
+ * Zustand persist의 "favoriteLocations:v2" 키에서 읽어옴
+ */
+export function loadFavoriteCoordinates(): Record<
+  FavoriteLocationId,
+  { lat: number; lon: number } | undefined
+> {
+  try {
+    const stored = localStorage.getItem("favoriteLocations:v2");
+    if (!stored) return {};
+    const parsed = JSON.parse(stored);
+    return typeof parsed?.coordinates === "object" && parsed.coordinates !== null
+      ? parsed.coordinates
+      : {};
+  } catch {
+    return {};
+  }
+}

@@ -48,7 +48,7 @@ export const FavoriteLocationsContent = () => {
               {...location}
               onClick={() => {
                 if (coords) {
-                  handleLocationClick(location.id, coords.lat, coords.lon);
+                  handleLocationClick(coords.lat, coords.lon);
                 }
               }}
               onDelete={(id, e) => {

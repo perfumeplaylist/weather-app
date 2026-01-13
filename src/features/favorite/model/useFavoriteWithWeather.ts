@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { useFavoriteLocations, mapToSavedLocation } from "@/entities/favorite";
-import { useWeatherBatch } from "@/features/weather/query";
+import { useWeatherBatch } from "@/features/weather-detail";
 import type { SavedLocationData } from "@/entities/favorite/model/favoriteTypes";
 
 /**
@@ -28,5 +28,3 @@ export const useFavoriteWithWeather = (): SavedLocationData[] => {
 
   return savedLocations;
 };
-
-

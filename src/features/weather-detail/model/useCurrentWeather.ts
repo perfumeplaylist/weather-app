@@ -1,5 +1,5 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { weatherQueryOption } from "@/features/weather/query";
+import { weatherQueryOption } from "./weatherQueryOptions";
 import { transformCurrentWeather } from "@/entities/weather";
 
 /**

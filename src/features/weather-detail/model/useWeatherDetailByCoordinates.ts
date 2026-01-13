@@ -1,17 +1,17 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
 import {
   createLocationFromCoordinates,
   parseLocationName,
 } from "@/entities/location";
-import { weatherQueryOption } from "./weatherQueryOptions";
 import { useCurrentWeather } from "./useCurrentWeather";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { weatherQueryOption } from "./weatherQueryOptions";
 import { transformForecastResponse } from "@/entities/weather";
 
 /**
- * 날씨 상세 페이지에 필요한 모든 데이터를 가져오는 훅
- * 현재 날씨와 예보 데이터를 함께 반환
+ * 좌표 기반 날씨 상세 데이터 훅
+ * locationId 없이 좌표만으로 날씨 정보를 가져옴
  */
-export const useWeatherDetail = (
+export const useWeatherDetailByCoordinates = (
   lat: number,
   lon: number,
   locationName?: string
@@ -22,10 +22,7 @@ export const useWeatherDetail = (
   const location = createLocationFromCoordinates(lat, lon, locationName);
 
   const { data: forecast } = useSuspenseQuery({
-    ...weatherQueryOption.forecastWeather({
-      lat,
-      lon,
-    }),
+    ...weatherQueryOption.forecastWeather({ lat, lon }),
     select: (data) => transformForecastResponse(data, lat, lon),
   });
 
