@@ -7,7 +7,7 @@ import {
   BaseSuspense,
   Skeleton,
 } from "@/shared";
-import { useSearchParams } from "react-router";
+import { useLocationParams } from "@/features/search-location";
 
 const WeatherDetailLoadingSkeleton = () => {
   return (
@@ -41,11 +41,9 @@ const WeatherDetailErrorState = ({ error }: { error: Error }) => {
 };
 
 export const WeatherDetailWidget = () => {
-  const [searchParams] = useSearchParams();
-  const lat = searchParams.get("lat");
-  const lon = searchParams.get("lon");
+  const { lat, lon } = useLocationParams();
 
-  if (!lat || !lon) {
+  if (!lat || !lon || Number(lat) === 0 || Number(lon) === 0) {
     return <EmptyState title="위치 정보를 불러올 수 없습니다." />;
   }
 
@@ -55,10 +53,7 @@ export const WeatherDetailWidget = () => {
       resetKey={[lat, lon]}
     >
       <BaseSuspense fallback={<WeatherDetailLoadingSkeleton />}>
-        <WeatherDetailContent
-          lat={parseFloat(lat)}
-          lon={parseFloat(lon)}
-        />
+        <WeatherDetailContent lat={parseFloat(lat)} lon={parseFloat(lon)} />
       </BaseSuspense>
     </BaseErrorBoundary>
   );
