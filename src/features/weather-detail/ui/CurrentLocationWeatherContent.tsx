@@ -20,8 +20,11 @@ export const CurrentLocationWeatherContent = () => {
       highTemp={weather.highTemp}
       lowTemp={weather.lowTemp}
       onClick={() => {
-        // TODO: 좌표를 그대로 넘겨줄게,locationId를 그대로 넘겨줄지 고민
-        // navigate(`/detail/${weather.locationId}`);
+        const queryParams = new URLSearchParams({
+          lat: geoData.lat.toString(),
+          lon: geoData.lon.toString(),
+        });
+        navigate(`/detail?${queryParams.toString()}`);
       }}
       className="md:h-auto md:aspect-4/5 cursor-pointer hover:shadow-lg transition-shadow"
     />

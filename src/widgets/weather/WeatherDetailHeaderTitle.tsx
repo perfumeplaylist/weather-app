@@ -1,8 +1,9 @@
 import { EditFavoriteAlias } from "@/features/favorite/edit-favorite-alias";
-import { useWeatherDetailHeader } from "@/features/weather/detail/model/useWeatherDetailHeader";
+import { useWeatherDetailHeaderByCoordinates } from "@/features/weather/detail/model/useWeatherDetailHeaderByCoordinates";
 
 interface WeatherDetailHeaderTitleProps {
-  locationId: string;
+  lat: number;
+  lon: number;
   variant: "mobile" | "desktop";
 }
 
@@ -12,15 +13,17 @@ interface WeatherDetailHeaderTitleProps {
  * 즐겨찾기인 경우 편집 가능한 별칭, 아닌 경우 일반 텍스트 표시
  */
 export const WeatherDetailHeaderTitle = ({
-  locationId,
+  lat,
+  lon,
   variant,
 }: WeatherDetailHeaderTitleProps) => {
-  const { isFavorite, displayName } = useWeatherDetailHeader(locationId);
+  const { location, isFavorite, displayName } =
+    useWeatherDetailHeaderByCoordinates(lat, lon);
 
   if (isFavorite) {
     return (
       <EditFavoriteAlias
-        locationId={locationId}
+        locationId={location.id}
         locationName={displayName}
         className={variant === "mobile" ? "max-w-[200px]" : "min-w-[200px]"}
       />

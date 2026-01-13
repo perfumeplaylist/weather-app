@@ -2,21 +2,23 @@ import { CurrentWeatherHero } from "@/widgets/weather/CurrentWeatherHero";
 import { HourlyForecastList } from "@/widgets/weather/HourlyForecastList";
 import { DailyForecastSummary } from "@/widgets/weather/DailyForecastSummary";
 import { WeatherBridgeText } from "@/widgets/weather/WeatherBridgeText";
-import { useWeatherDetail } from "../model/useWeatherDetail";
+import { useWeatherDetailByCoordinates } from "../model/useWeatherDetailByCoordinates";
 
 interface WeatherDetailContentProps {
-  locationId: string;
+  lat: number;
+  lon: number;
 }
 
 /**
  * 날씨 상세 페이지의 메인 컨텐츠 컴포넌트
- * useWeatherDetail 훅을 사용하여 데이터를 가져오고 레이아웃과 Feature 컴포넌트들을 조합
+ * useWeatherDetailByCoordinates 훅을 사용하여 데이터를 가져오고 레이아웃과 Feature 컴포넌트들을 조합
  */
 export const WeatherDetailContent = ({
-  locationId,
+  lat,
+  lon,
 }: WeatherDetailContentProps) => {
   const { location, currentWeather, forecast, locationNames } =
-    useWeatherDetail(locationId);
+    useWeatherDetailByCoordinates(lat, lon);
 
   return (
     <div className="px-4 pb-10 md:p-8 md:grid md:grid-cols-2 md:gap-8 md:items-start">

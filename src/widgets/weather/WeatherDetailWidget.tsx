@@ -1,4 +1,3 @@
-import { useParams } from "react-router";
 import { WeatherDetailContent } from "@/features/weather-detail";
 import { AlertTriangle } from "lucide-react";
 import { Flex, Text } from "@packages/ui";
@@ -8,6 +7,7 @@ import {
   BaseSuspense,
   Skeleton,
 } from "@/shared";
+import { useSearchParams } from "react-router";
 
 const WeatherDetailLoadingSkeleton = () => {
   return (
@@ -41,19 +41,24 @@ const WeatherDetailErrorState = ({ error }: { error: Error }) => {
 };
 
 export const WeatherDetailWidget = () => {
-  const { locationId } = useParams<{ locationId: string }>();
+  const [searchParams] = useSearchParams();
+  const lat = searchParams.get("lat");
+  const lon = searchParams.get("lon");
 
-  if (!locationId) {
+  if (!lat || !lon) {
     return <EmptyState title="위치 정보를 불러올 수 없습니다." />;
   }
 
   return (
     <BaseErrorBoundary
       FallbackComponent={WeatherDetailErrorState}
-      resetKey={[locationId]}
+      resetKey={[lat, lon]}
     >
       <BaseSuspense fallback={<WeatherDetailLoadingSkeleton />}>
-        <WeatherDetailContent locationId={locationId} />
+        <WeatherDetailContent
+          lat={parseFloat(lat)}
+          lon={parseFloat(lon)}
+        />
       </BaseSuspense>
     </BaseErrorBoundary>
   );

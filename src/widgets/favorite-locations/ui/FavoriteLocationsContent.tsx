@@ -1,6 +1,7 @@
 import { DeleteAllFavoritesButton } from "@/features/favorite/ui/DeleteAllFavoritesButton";
 import { useFavoriteWithWeather } from "@/features/favorite/model/useFavoriteWithWeather";
 import { useFavoriteActions } from "@/features/favorite/model/useFavoriteActions";
+import { useFavoriteLocations } from "@/entities/favorite";
 import { Flex, Grid } from "@packages/ui";
 import { FavoriteLocationCard } from "@/widgets/location/FavoriteLocationCard";
 
@@ -21,7 +22,13 @@ const EmptyFavoriteState = () => {
  */
 export const FavoriteLocationsContent = () => {
   const favoriteLocations = useFavoriteWithWeather();
+  const { locations } = useFavoriteLocations();
   const { handleLocationClick, handleDeleteLocation } = useFavoriteActions();
+
+  // locationId로 좌표 매핑
+  const locationMap = new Map(
+    locations.map((loc) => [loc.id, { lat: loc.lat, lon: loc.lon }])
+  );
 
   if (favoriteLocations.length === 0) {
     return <EmptyFavoriteState />;
@@ -33,17 +40,24 @@ export const FavoriteLocationsContent = () => {
         <DeleteAllFavoritesButton />
       </Flex>
       <Grid cols={2} gap={3} className="md:grid-cols-3 lg:grid-cols-4 pb-4">
-        {favoriteLocations.map((location) => (
-          <FavoriteLocationCard
-            key={location.id}
-            {...location}
-            onClick={() => handleLocationClick(location.id)}
-            onDelete={(id, e) => {
-              e.stopPropagation();
-              handleDeleteLocation(id);
-            }}
-          />
-        ))}
+        {favoriteLocations.map((location) => {
+          const coords = locationMap.get(location.id);
+          return (
+            <FavoriteLocationCard
+              key={location.id}
+              {...location}
+              onClick={() => {
+                if (coords) {
+                  handleLocationClick(location.id, coords.lat, coords.lon);
+                }
+              }}
+              onDelete={(id, e) => {
+                e.stopPropagation();
+                handleDeleteLocation(id);
+              }}
+            />
+          );
+        })}
       </Grid>
     </div>
   );

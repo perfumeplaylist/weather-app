@@ -1,8 +1,10 @@
 import { Star } from "lucide-react";
 import { useToggleFavorite } from "../model/useToggleFavorite";
+import { createLocationFromCoordinates } from "@/entities/location";
 
 interface ToggleFavoriteButtonProps {
-  locationId: string;
+  lat: number;
+  lon: number;
   variant?: "mobile" | "desktop";
   className?: string;
 }
@@ -12,17 +14,20 @@ interface ToggleFavoriteButtonProps {
  * 모바일/데스크탑 버전을 variant로 구분
  */
 export const ToggleFavoriteButton = ({
-  locationId,
+  lat,
+  lon,
   variant = "mobile",
   className,
 }: ToggleFavoriteButtonProps) => {
   const { handleToggle, isFavorite } = useToggleFavorite();
+  const location = createLocationFromCoordinates(lat, lon);
+  const locationId = location.id;
   const isFav = isFavorite(locationId);
 
   if (variant === "mobile") {
     return (
       <button
-        onClick={() => handleToggle(locationId)}
+        onClick={() => handleToggle(locationId, { lat, lon })}
         className={`p-2 rounded-full hover:bg-gray-100 transition-colors ${
           className || ""
         }`}
@@ -39,7 +44,7 @@ export const ToggleFavoriteButton = ({
   // Desktop variant
   return (
     <button
-      onClick={() => handleToggle(locationId)}
+      onClick={() => handleToggle(locationId, { lat, lon })}
       className={`flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium text-gray-600 ${
         className || ""
       }`}

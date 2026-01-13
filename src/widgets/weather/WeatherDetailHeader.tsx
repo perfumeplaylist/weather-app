@@ -1,12 +1,12 @@
-import { useParams } from "react-router";
 import { WeatherMobileHeader } from "./WeatherMobileHeader";
 import { WeatherDesktopHeader } from "./WeatherDesktopHeader";
 import { BaseErrorBoundary, EmptyState } from "@/shared";
+import { useLocationParams } from "@/features/search-location";
 
 export const WeatherDetailHeader = () => {
-  const { locationId } = useParams();
+  const { lat, lon } = useLocationParams();
 
-  if (!locationId) {
+  if (!lat || !lon) {
     return <EmptyState title="위치 정보를 불러올 수 없습니다." />;
   }
 
@@ -19,8 +19,8 @@ export const WeatherDetailHeader = () => {
         />
       )}
     >
-      <WeatherMobileHeader locationId={locationId} />
-      <WeatherDesktopHeader locationId={locationId} />
+      <WeatherMobileHeader lat={parseFloat(lat)} lon={parseFloat(lon)} />
+      <WeatherDesktopHeader lat={parseFloat(lat)} lon={parseFloat(lon)} />
     </BaseErrorBoundary>
   );
 };

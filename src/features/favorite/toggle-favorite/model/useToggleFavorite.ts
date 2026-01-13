@@ -14,7 +14,10 @@ export const useToggleFavorite = () => {
   const isFavorite = useFavoriteStore((state) => state.isFavorite);
 
   const handleToggle = useCallback(
-    (locationId: string) => {
+    (
+      locationId: string,
+      coordinates?: { lat: number; lon: number }
+    ) => {
       const isFav = isFavorite(locationId);
 
       if (isFav) {
@@ -29,7 +32,7 @@ export const useToggleFavorite = () => {
           toast.error("즐겨찾기는 최대 6개까지만 추가할 수 있습니다");
           return;
         }
-        const success = toggleFavorite(locationId);
+        const success = toggleFavorite(locationId, coordinates);
         if (success) {
           toast.success("즐겨찾기에 추가되었습니다");
         } else {

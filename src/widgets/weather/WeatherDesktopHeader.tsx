@@ -7,7 +7,13 @@ import { WeatherDetailHeaderTitle } from "./WeatherDetailHeaderTitle";
  * 날씨 상세 페이지 데스크탑 헤더
  * Feature 컴포넌트들을 조합하여 구성
  */
-export const WeatherDesktopHeader = ({ locationId }: { locationId: string }) => {
+export const WeatherDesktopHeader = ({
+  lat,
+  lon,
+}: {
+  lat: number;
+  lon: number;
+}) => {
   const navigate = useNavigate();
 
   return (
@@ -21,10 +27,10 @@ export const WeatherDesktopHeader = ({ locationId }: { locationId: string }) => 
       </button>
 
       <div className="flex items-center gap-3">
-        <WeatherDetailHeaderTitle locationId={locationId} variant="desktop" />
+        <WeatherDetailHeaderTitle lat={lat} lon={lon} variant="desktop" />
       </div>
 
-      <ToggleFavoriteButton locationId={locationId} variant="desktop" />
+      <ToggleFavoriteButton lat={lat} lon={lon} variant="desktop" />
     </div>
   );
 };

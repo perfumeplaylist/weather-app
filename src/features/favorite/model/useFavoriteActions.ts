@@ -14,8 +14,12 @@ export const useFavoriteActions = () => {
   );
 
   const handleLocationClick = useCallback(
-    (id: string) => {
-      navigate(`/detail/${id}`);
+    (lat: number, lon: number) => {
+      const queryParams = new URLSearchParams({
+        lat: lat.toString(),
+        lon: lon.toString(),
+      });
+      navigate(`/detail?${queryParams.toString()}`);
     },
     [navigate]
   );
@@ -39,5 +43,3 @@ export const useFavoriteActions = () => {
     handleDeleteAll,
   };
 };
-
-

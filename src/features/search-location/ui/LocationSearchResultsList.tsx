@@ -1,5 +1,5 @@
 import { Card, Text, Flex, Badge } from "@packages/ui";
-import type { SearchLocationItem } from "@/entities/location";
+import { type SearchLocationItem } from "@/entities/location";
 import { formatLocationDisplay } from "../lib/locationFormatter";
 import { useNavigate } from "react-router";
 
@@ -13,7 +13,17 @@ export function LocationSearchResultsList({
   const navigate = useNavigate();
 
   const handleCardClick = (item: SearchLocationItem) => {
-    navigate(`/detail/${item.key}`);
+    const { lat, lon } = item.weatherLocation?.coordinates ?? {
+      lat: 0,
+      lon: 0,
+    };
+
+    const queryParams = new URLSearchParams({
+      lat: lat.toString(),
+      lon: lon.toString(),
+    });
+
+    navigate(`/detail?${queryParams.toString()}`);
   };
 
   if (results.length === 0) {
