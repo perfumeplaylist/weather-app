@@ -35,7 +35,7 @@ import { fileURLToPath } from "url";
 
 type DistrictKey = `${string}-${string}`;
 
-type ExistingLocation = {
+interface ExistingLocation {
   id: DistrictKey;
   city: string;
   district: string;
@@ -43,20 +43,20 @@ type ExistingLocation = {
   coordinates: { lat: number; lon: number };
   apiName?: string;
   country?: string;
-};
+}
 
-type ExistingFile = {
+interface ExistingFile {
   metadata: Record<string, unknown>;
   locations: ExistingLocation[];
-};
+}
 
-type GeoResult = {
+interface GeoResult {
   name: string;
   lat: number;
   lon: number;
   country?: string;
   state?: string;
-};
+}
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -297,8 +297,8 @@ async function fetchGeocode(q: string, retry = 0): Promise<GeoResult[] | null> {
     const data = (await res.json()) as unknown;
     if (!Array.isArray(data)) return null;
     return data as GeoResult[];
-  } catch (e: Error) {
-    if (retry < CONFIG.MAX_RETRIES) {
+  } catch (e: unknown) {
+    if (retry < CONFIG.MAX_RETRIES && e instanceof Error) {
       await sleep(600 * (retry + 1));
       return fetchGeocode(q, retry + 1);
     }
@@ -448,16 +448,12 @@ async function main() {
 
   // 3) Fill missing using a pool
   let done = 0;
-  const filled = await promisePool(
-    missing,
-    CONFIG.CONCURRENCY,
-    async (key, idx) => {
-      done++;
-      progress(done, missing.length, key);
-      const loc = await resolveCoordinates(key);
-      return loc;
-    }
-  );
+  const filled = await promisePool(missing, CONFIG.CONCURRENCY, async (key) => {
+    done++;
+    progress(done, missing.length, key);
+    const loc = await resolveCoordinates(key);
+    return loc;
+  });
 
   process.stdout.write("\n");
 
