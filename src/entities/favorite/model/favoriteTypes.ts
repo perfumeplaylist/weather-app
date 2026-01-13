@@ -3,6 +3,10 @@ export type FavoriteLocationId = string;
 export type FavoriteState = {
   ids: FavoriteLocationId[];
   aliases: Record<FavoriteLocationId, string | undefined>;
+  coordinates: Record<
+    FavoriteLocationId,
+    { lat: number; lon: number } | undefined
+  >;
 };
 
 export interface FavoriteLocation {

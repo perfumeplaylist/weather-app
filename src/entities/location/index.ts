@@ -22,6 +22,8 @@ export {
   getAllLocations,
   getLocationById,
   searchLocations,
+  getLocationByCoordinates,
+  createLocationFromCoordinates,
 } from "./model/locationService";
 
 // Lib
