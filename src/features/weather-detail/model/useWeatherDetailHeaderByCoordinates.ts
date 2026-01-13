@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { createLocationFromCoordinates } from "@/entities/location";
 import { useFavoriteStore } from "@/entities/favorite";
 
@@ -11,12 +12,26 @@ export const useWeatherDetailHeaderByCoordinates = (
   locationName?: string
 ) => {
   const location = createLocationFromCoordinates(lat, lon, locationName);
-  const isFavorite = useFavoriteStore((state) => state.isFavorite);
-  const getAlias = useFavoriteStore((state) => state.getAlias);
+  
+  // Zustand store에서 직접 구독하여 변경사항을 즉시 반영
+  const ids = useFavoriteStore((state) => state.ids);
+  const aliases = useFavoriteStore((state) => state.aliases);
 
-  const isCurrentLocationFavorite = isFavorite(location.id);
-  const alias = getAlias(location.id);
-  const displayName = alias || location.label;
+  // location.id에 해당하는 값들을 계산
+  const isCurrentLocationFavorite = useMemo(
+    () => ids.includes(location.id),
+    [ids, location.id]
+  );
+  
+  const alias = useMemo(
+    () => aliases[location.id],
+    [aliases, location.id]
+  );
+  
+  const displayName = useMemo(
+    () => alias || location.label,
+    [alias, location.label]
+  );
 
   return {
     location,

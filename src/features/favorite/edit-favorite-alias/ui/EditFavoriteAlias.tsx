@@ -18,12 +18,13 @@ export const EditFavoriteAlias = ({
   locationName,
   className,
 }: EditFavoriteAliasProps) => {
-  const getAlias = useFavoriteStore((state) => state.getAlias);
+  // aliases 객체를 직접 구독하여 변경사항을 즉시 반영
+  const aliases = useFavoriteStore((state) => state.aliases);
   const { handleSave } = useEditFavoriteAlias();
 
   const alias = useMemo(() => {
-    return getAlias(locationId) || "";
-  }, [locationId, getAlias]);
+    return aliases[locationId] || "";
+  }, [aliases, locationId]);
 
   const handleAliasSave = (newAlias: string) => {
     handleSave(locationId, newAlias);
