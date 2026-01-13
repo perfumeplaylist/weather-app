@@ -1,2 +1,0 @@
-export { mapToSavedLocation } from "./mapToSavedLocation";
-

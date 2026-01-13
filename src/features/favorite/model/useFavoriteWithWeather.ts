@@ -1,12 +1,11 @@
 import { useMemo } from "react";
-import { useFavoriteLocations } from "@/entities/favorite";
-import { useWeatherBatch } from "@/entities/weather";
-import { mapToSavedLocation } from "../lib/mapToSavedLocation";
+import { useFavoriteLocations, mapToSavedLocation } from "@/entities/favorite";
+import { useWeatherBatch } from "@/features/weather/query";
 import type { SavedLocationData } from "@/entities/favorite/model/favoriteTypes";
 
 /**
  * 즐겨찾기 위치와 날씨 데이터를 결합하여 SavedLocationData 배열을 반환하는 훅
- * 
+ *
  * @returns SavedLocationData 배열
  */
 export const useFavoriteWithWeather = (): SavedLocationData[] => {
@@ -29,4 +28,5 @@ export const useFavoriteWithWeather = (): SavedLocationData[] => {
 
   return savedLocations;
 };
+
 

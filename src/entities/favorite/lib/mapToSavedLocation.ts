@@ -2,11 +2,11 @@ import type { FavoriteLocation } from "@/entities/favorite/model/favoriteTypes";
 import type { SavedLocationData } from "@/entities/favorite/model/favoriteTypes";
 import type { WeatherForecast } from "@/entities/weather/model/schema";
 import type { WeatherType } from "@/entities/weather/model/iconMap";
-import { mapWeatherCodeToType } from "@/features/weather/utils/weatherCodeMapper";
+import { mapWeatherCodeToType } from "@/widgets/weather/utils/weatherCodeMapper";
 
 /**
  * FavoriteLocation과 WeatherForecast를 결합하여 SavedLocationData로 변환하는 순수 함수
- * 
+ *
  * @param location - 즐겨찾기 위치 정보
  * @param weatherData - 날씨 데이터 (null 가능)
  * @param displayName - 표시할 이름 (별칭 또는 기본 이름)
@@ -55,4 +55,3 @@ export function mapToSavedLocation(
     weatherType,
   };
 }
-

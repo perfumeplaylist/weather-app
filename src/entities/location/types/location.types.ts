@@ -28,3 +28,12 @@ export interface SearchLocationItem {
   displayName: string; // "서울특별시 종로구 청운동"
   weatherLocation?: WeatherLocation; // 날씨 정보 있는 경우만
 }
+
+// Location Entity (최종 도메인 모델)
+export interface LocationEntity {
+  id: string; // DistrictKey 형식: "서울특별시-종로구-청운동"
+  label: string; // 표시명: "서울특별시 종로구 청운동"
+  tokens: string[]; // 검색용 토큰 배열: ["서울특별시", "종로구", "청운동"]
+  lat: number; // 위도 (weatherLocation에서 매칭)
+  lon: number; // 경도 (weatherLocation에서 매칭)
+}

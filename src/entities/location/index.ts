@@ -3,6 +3,7 @@ export type {
   WeatherLocation,
   DistrictKey,
   SearchLocationItem,
+  LocationEntity,
 } from "./types/location.types";
 
 // API
@@ -13,4 +14,17 @@ export {
 } from "./api/locationData";
 
 // Model
-export { parseDistrictKey } from "./model/locationParser";
+export {
+  parseDistrictKey,
+  parseDistrictKeyToEntity,
+} from "./model/locationParser";
+export {
+  getAllLocations,
+  getLocationById,
+  searchLocations,
+} from "./model/locationService";
+
+// Lib
+export { parseLocationName } from "./lib/parseLocationName";
+
+export { LocationName } from "./ui/locationName";
