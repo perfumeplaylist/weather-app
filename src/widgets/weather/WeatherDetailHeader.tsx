@@ -6,7 +6,7 @@ import { useLocationParams } from "@/features/search-location";
 export const WeatherDetailHeader = () => {
   const { lat, lon } = useLocationParams();
 
-  if (!lat || !lon) {
+  if (Number(lat) === 0 || Number(lon) === 0 || !lat || !lon) {
     return <EmptyState title="위치 정보를 불러올 수 없습니다." />;
   }
 

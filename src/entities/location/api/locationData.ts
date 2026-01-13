@@ -2,8 +2,6 @@ import weatherLocationsData from "../../../../data/location_coordinates.filled.j
 import allDistrictsData from "../../../../data/korea_districts.json";
 import type { WeatherLocation, DistrictKey } from "../types/location.types";
 
-console.log(weatherLocationsData);
-console.log(allDistrictsData);
 // 날씨 정보 있는 location (189개)
 export const weatherLocationsMap = new Map<string, WeatherLocation>(
   (weatherLocationsData.locations as WeatherLocation[]).map((loc) => [
