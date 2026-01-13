@@ -40,6 +40,7 @@ const iconVariants = cva(
 interface IconProps extends VariantProps<typeof iconVariants> {
   children: ReactNode;
   className?: string;
+  onClick?: () => void;
 }
 
 export const Icon = ({
@@ -47,9 +48,13 @@ export const Icon = ({
   size,
   color,
   className,
+  onClick,
 }: IconProps) => {
   return (
-    <span className={cn(iconVariants({ size, color }), className)}>
+    <span
+      className={cn(iconVariants({ size, color }), className)}
+      onClick={onClick}
+    >
       {children}
     </span>
   );
