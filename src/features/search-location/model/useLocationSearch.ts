@@ -7,10 +7,8 @@ import type {
   InitMessage,
 } from "./locationSearchWorker.types";
 
-// Worker 파일 경로 (Vite에서 Worker를 생성할 때 사용)
-const getWorkerUrl = () => {
-  return new URL("./locationSearchWorker.worker.ts", import.meta.url);
-};
+// Vite의 Worker import 방식 사용 (프로덕션 빌드에서 올바르게 처리됨)
+import LocationSearchWorker from "./locationSearchWorker.worker.ts?worker";
 
 /**
  * 지역 검색 훅
@@ -57,8 +55,8 @@ export function useLocationSearch(maxResults = 50) {
    * 컴포넌트 마운트 시 한 번만 실행
    */
   useEffect(() => {
-    // Worker 생성
-    const worker = new Worker(getWorkerUrl(), { type: "module" });
+    // Worker 생성 - import한 Worker 클래스 사용
+    const worker = new LocationSearchWorker();
     workerRef.current = worker;
 
     // 이벤트 핸들러 등록
