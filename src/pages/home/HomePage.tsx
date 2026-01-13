@@ -1,5 +1,5 @@
-import { FavoriteLocationsWidget } from "../../widget/favorite-locations";
-import { CurrentLocationWeatherWidget } from "../../widget/weather/CurrentLocationWeatherWidget";
+import { FavoriteLocationsWidget } from "../../widgets/favorite-locations";
+import { CurrentLocationWeatherWidget } from "../../widgets/weather/CurrentLocationWeatherWidget";
 
 export const HomePage = () => {
   return (

@@ -1,5 +1,5 @@
-import { Header } from "../../shared/ui/Header";
-import { LocationSearchWidget } from "../../widget/location/LocationSearchWidget";
+import { Header } from "@/shared";
+import { LocationSearchWidget } from "@/widgets/location/LocationSearchWidget";
 
 export const SearchPage = () => {
   return (

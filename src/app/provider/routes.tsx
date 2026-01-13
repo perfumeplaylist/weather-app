@@ -1,3 +1,4 @@
+import { useGetGeoLocation } from "@/features/geolocation";
 import { DetailPage } from "@/pages/detail/DetailPage";
 import { HomePage } from "@/pages/home/HomePage";
 import { SearchPage } from "@/pages/search/SearchPage";
@@ -7,6 +8,8 @@ import { createBrowserRouter, Outlet } from "react-router";
 import { RouterProvider } from "react-router/dom";
 
 const Layout = () => {
+  useGetGeoLocation();
+
   return (
     <PageLayout>
       <Outlet />
