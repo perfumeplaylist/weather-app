@@ -6,10 +6,10 @@ import { PageLayout } from "@/shared";
 import { BottomNavigation } from "@/shared/ui/BottomNavigation";
 import { createBrowserRouter, Outlet } from "react-router";
 import { RouterProvider } from "react-router/dom";
+import { homeLoader, detailLoader } from "./loaders";
 
 const Layout = () => {
   useGetGeoLocation();
-
   return (
     <PageLayout>
       <Outlet />
@@ -26,14 +26,16 @@ const router = createBrowserRouter([
       {
         index: true,
         Component: HomePage,
+        loader: homeLoader,
       },
       {
         path: "/search",
         Component: SearchPage,
       },
       {
-        path: "/detail/:locationId",
+        path: "/detail",
         Component: DetailPage,
+        loader: detailLoader,
       },
     ],
   },
