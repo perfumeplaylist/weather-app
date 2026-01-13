@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 import { ArrowLeft } from "lucide-react";
 import { cn } from "../../../packages/utils/cn";
 
-interface HeaderProps {
+interface AppHeaderProps {
   title?: string | ReactNode;
   left?: ReactNode;
   right?: ReactNode;
@@ -12,14 +12,14 @@ interface HeaderProps {
   onBack?: () => void;
 }
 
-export const Header = ({
+export const AppHeader = ({
   title,
   left,
   right,
   className,
   showBack = false,
   onBack,
-}: HeaderProps) => {
+}: AppHeaderProps) => {
   const navigate = useNavigate();
 
   const handleBack = () => {

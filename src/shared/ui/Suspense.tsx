@@ -1,12 +1,12 @@
 import { Suspense, useEffect, useState } from "react";
 import type { ReactNode } from "react";
 
-type BaseSuspenseProps = {
+interface BaseSuspenseProps {
   fallback: ReactNode;
   children: ReactNode;
   deferMs?: number;
   resetKey?: string | number;
-};
+}
 
 const DeferredComponent = ({
   children,

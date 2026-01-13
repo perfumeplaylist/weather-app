@@ -7,11 +7,11 @@ import {
 } from "react-error-boundary";
 import { Card, Button, Text, Icon, Container, Flex } from "@packages/ui";
 
-type BaseErrorBoundaryProps = {
+interface BaseErrorBoundaryProps {
   children: ErrorBoundaryProps["children"];
   FallbackComponent?: ErrorBoundaryProps["FallbackComponent"];
   resetKey?: ErrorBoundaryProps["resetKeys"];
-};
+}
 
 const DefaultFallback = ({ error, resetErrorBoundary }: FallbackProps) => {
   return (
