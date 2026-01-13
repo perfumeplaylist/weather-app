@@ -1,5 +1,7 @@
 import { queryOptions } from "@tanstack/react-query";
-import { geolocationQueryKeyFactory, getCurrentPosition } from "../";
+import { geolocationQueryKeyFactory } from "./queryKeyFactory";
+import { getCurrentPosition } from "@/entities/geolocation/api/api";
+
 /**
  * Geolocation Query Options
  * queryOptions() 사용, API 레이어 함수만 호출

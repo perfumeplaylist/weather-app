@@ -6,4 +6,3 @@ export const geolocationQueryKeyFactory = {
   geolocation: () => ["geolocation"] as const,
   current: () => [...geolocationQueryKeyFactory.geolocation(), "current"] as const,
 };
-

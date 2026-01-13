@@ -1,5 +1,5 @@
 import { useSuspenseQueries } from "@tanstack/react-query";
-import { weatherQueryOption } from "./queryOption";
+import { weatherQueryOption } from "../index";
 import type { FavoriteLocation } from "@/entities/favorite/model/favoriteTypes";
 
 export const useWeatherBatch = (locations: FavoriteLocation[]) => {
@@ -17,4 +17,3 @@ export const useWeatherBatch = (locations: FavoriteLocation[]) => {
     },
   };
 };
-

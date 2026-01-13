@@ -1,6 +1,6 @@
 import { queryOptions } from "@tanstack/react-query";
 import { weatherQueryKeyFactory } from "./queryKeyFactory";
-import { getForecast, getWeather } from "../api/weatherApi";
+import { getForecast, getWeather } from "@/entities/weather/api/weatherApi";
 
 /**
  * Weather Query Options
