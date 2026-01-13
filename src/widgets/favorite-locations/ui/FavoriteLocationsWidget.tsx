@@ -1,5 +1,5 @@
 import BaseErrorBoundary from "@/shared/ui/ErrorBoundary";
-import BaseSuspense from "@/shared/ui/Susepse";
+import BaseSuspense from "@/shared/ui/Suspense";
 import { CountAddFavorite } from "@/features/favorite/ui/CountAddFavorite";
 import { FavoriteLocationsContent } from "./FavoriteLocationsContent";
 import { FavoriteLocationsErrorState } from "./FavoriteLocationsErrorState";
@@ -20,4 +20,3 @@ export const FavoriteLocationsWidget = () => {
     </BaseErrorBoundary>
   );
 };
-

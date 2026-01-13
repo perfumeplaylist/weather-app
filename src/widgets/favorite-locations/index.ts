@@ -1,0 +1,1 @@
+export { FavoriteLocationsWidget } from "./ui";

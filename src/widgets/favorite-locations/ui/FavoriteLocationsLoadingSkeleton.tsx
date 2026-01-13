@@ -6,4 +6,3 @@ import { Skeleton } from "@/shared/ui/Skeleton";
 export const FavoriteLocationsLoadingSkeleton = () => {
   return <Skeleton height={400} className="rounded-2xl md:aspect-4/5" />;
 };
-

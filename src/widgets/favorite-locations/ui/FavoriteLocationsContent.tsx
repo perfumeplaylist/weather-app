@@ -1,8 +1,8 @@
-import { FavoriteLocationsGrid } from "@/features/location/FavoriteLocationsGrid";
 import { DeleteAllFavoritesButton } from "@/features/favorite/ui/DeleteAllFavoritesButton";
 import { useFavoriteWithWeather } from "@/features/favorite/model/useFavoriteWithWeather";
 import { useFavoriteActions } from "@/features/favorite/model/useFavoriteActions";
-import { Flex } from "@packages/ui";
+import { Flex, Grid } from "@packages/ui";
+import { FavoriteLocationCard } from "@/widgets/location/FavoriteLocationCard";
 
 const EmptyFavoriteState = () => {
   return (
@@ -32,11 +32,19 @@ export const FavoriteLocationsContent = () => {
       <Flex justify="end">
         <DeleteAllFavoritesButton />
       </Flex>
-      <FavoriteLocationsGrid
-        locations={favoriteLocations}
-        onLocationClick={handleLocationClick}
-        onDeleteLocation={handleDeleteLocation}
-      />
+      <Grid cols={2} gap={3} className="md:grid-cols-3 lg:grid-cols-4 pb-4">
+        {favoriteLocations.map((location) => (
+          <FavoriteLocationCard
+            key={location.id}
+            {...location}
+            onClick={() => handleLocationClick(location.id)}
+            onDelete={(id, e) => {
+              e.stopPropagation();
+              handleDeleteLocation(id);
+            }}
+          />
+        ))}
+      </Grid>
     </div>
   );
 };
