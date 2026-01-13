@@ -1,4 +1,4 @@
-import type { FavoriteState, FavoriteLocationId } from "./favoriteTypes";
+import type { FavoriteLocationId } from "./favoriteTypes";
 
 const STORAGE_KEY_IDS = "favoriteLocations:v1";
 const STORAGE_KEY_ALIASES = "favoriteLocationAliases:v1";

@@ -1,5 +1,5 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { geolocationQueryOption } from "./geolocationQueryOptions";
+import { geolocationQueryOption } from "../index";
 import type { GeolocationError } from "@/entities/geolocation/api/api";
 
 export const useGetGeoLocation = () => {
