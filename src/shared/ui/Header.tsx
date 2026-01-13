@@ -4,7 +4,7 @@ import { ArrowLeft } from "lucide-react";
 import { cn } from "../../../packages/utils/cn";
 
 interface HeaderProps {
-  title?: string;
+  title?: string | ReactNode;
   left?: ReactNode;
   right?: ReactNode;
   className?: string;
